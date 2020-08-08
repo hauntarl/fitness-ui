@@ -3,5 +3,5 @@ import 'package:flutter/material.dart';
 import './colors.dart';
 
 final kDefaultTheme = ThemeData(
-  primaryColor: ColorPalette.violet,
+  primaryColor: ColorPalette.purple,
 );
