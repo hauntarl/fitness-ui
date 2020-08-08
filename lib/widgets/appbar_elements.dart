@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
+import '../utils/fitness_icons.dart';
 import '../bloc/date_bloc.dart';
 import './appbar_title.dart';
 
@@ -43,7 +44,7 @@ class _AppBarElementsState extends State<AppBarElements>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _iconButton(
-          Icons.arrow_back_ios,
+          FitnessIcons.left_open_big,
           DateEvent.subtract,
         ),
         FadeTransition(
@@ -51,7 +52,7 @@ class _AppBarElementsState extends State<AppBarElements>
           child: AppBarTitle(),
         ),
         _iconButton(
-          Icons.arrow_forward_ios,
+          FitnessIcons.right_open_big,
           DateEvent.add,
         ),
       ],
