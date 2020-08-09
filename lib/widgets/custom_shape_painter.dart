@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
 
-class CustomShape extends CustomPainter {
+class CustomShapePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var h = size.height, w = size.width;

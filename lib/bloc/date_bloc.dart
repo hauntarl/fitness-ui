@@ -38,3 +38,4 @@ class DateBloc {
 }
 
 final dateBloc = DateBloc();
+final initialDate = CustomDate(DateTime.now());

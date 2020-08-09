@@ -8,7 +8,7 @@ class AppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<CustomDate>(
-      initialData: CustomDate(DateTime.now()),
+      initialData: initialDate,
       stream: dateBloc.dateStream,
       builder: (context, snapshot) {
         var customDate = snapshot.data;

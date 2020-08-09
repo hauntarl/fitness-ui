@@ -9,5 +9,5 @@ class ColorPalette {
   static const purpleLight = Color(0xffB882CB);
   static const purple = Color(0xff7A3AFD);
   static const teal = Color(0xff20878F);
-  static const red = Color(0xffE81622);
+  static const red = Color(0xffF84D62);
 }
