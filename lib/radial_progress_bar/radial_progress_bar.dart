@@ -4,15 +4,24 @@ import 'package:flutter/material.dart';
 
 import './radial_background_painter.dart';
 import './animated_radial_progress.dart';
+import './animated_content.dart';
 import '../bloc/date_bloc.dart';
 import '../models/custom_date.dart';
-import '../utils/colors.dart';
 
 class RadialProgressBar extends StatelessWidget {
   final double size;
   RadialProgressBar(this.size);
 
   static final random = math.Random();
+
+  static const _activities = {
+    0: 'SWIMMING',
+    1: 'CYCLING',
+    2: 'RUNNING',
+    3: 'YOGA',
+    4: 'DANCE',
+    5: 'GYM',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -40,50 +49,17 @@ class RadialProgressBar extends StatelessWidget {
         Container(
           height: size,
           width: size,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('RUNNING', style: kHeading),
-              kDivider,
-              SizedBox(height: 10),
-              StreamBuilder<Object>(
-                initialData: initialDate,
-                stream: dateBloc.dateStream,
-                builder: (context, snapshot) {
-                  var calories = 1 + random.nextDouble();
-                  return Text('${calories.toStringAsFixed(3)}', style: kValue);
-                },
-              ),
-              Text('CALORIES BURN', style: kSubhead),
-            ],
+          child: StreamBuilder<CustomDate>(
+            initialData: initialDate,
+            stream: dateBloc.dateStream,
+            builder: (context, snapshot) {
+              var calories = 1 + random.nextDouble();
+              var index = random.nextInt(6);
+              return AnimatedContent(calories, _activities[index]);
+            },
           ),
         ),
       ],
     );
   }
 }
-
-const kHeading = TextStyle(
-  letterSpacing: 4,
-  fontSize: 20,
-);
-
-const kValue = TextStyle(
-  fontWeight: FontWeight.w900,
-  fontSize: 43,
-  letterSpacing: 1.1,
-);
-
-const kSubhead = TextStyle(
-  color: ColorPalette.purple,
-  letterSpacing: 4,
-  fontWeight: FontWeight.w500,
-);
-
-const kDivider = Divider(
-  color: ColorPalette.purple,
-  thickness: 3,
-  indent: 70,
-  endIndent: 70,
-);

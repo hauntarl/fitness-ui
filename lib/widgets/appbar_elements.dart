@@ -21,7 +21,7 @@ class _AppBarElementsState extends State<AppBarElements>
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 300),
     );
 
     _fadeController = Tween<double>(
