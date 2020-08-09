@@ -38,9 +38,11 @@ class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
       child: GestureDetector(
         onTap: () {
           widget.onTap();
-          setState(() => _controller.isCompleted
-              ? _controller.reverse()
-              : _controller.forward());
+          setState(() {
+            _controller.isCompleted
+                ? _controller.reverse()
+                : _controller.forward();
+          });
         },
         child: AnimatedIcon(
           size: 35,
