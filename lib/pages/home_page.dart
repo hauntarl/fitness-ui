@@ -10,23 +10,23 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CustomAppBar(),
-          RadialProgressBar(225),
-          Container(
-            height: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _data,
-                AnimatedMenuButton(
-                  onTap: () {},
-                ),
-                SizedBox(height: 10),
-              ],
+          Expanded(
+            child: Center(
+              child: RadialProgressBar(225),
             ),
           ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _data,
+              AnimatedMenuButton(
+                onTap: () {},
+              ),
+            ],
+          ),
+          SizedBox(height: 5),
         ],
       ),
     );
@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
     String progress,
   }) {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Row(
         children: [
           Expanded(

@@ -2,11 +2,11 @@ import 'dart:math' as math show Random;
 
 import 'package:flutter/material.dart';
 
-import './radial_background_painter.dart';
 import './animated_radial_progress.dart';
 import './animated_content.dart';
 import '../bloc/date_bloc.dart';
 import '../models/custom_date.dart';
+import '../utils/colors.dart';
 
 class RadialProgressBar extends StatelessWidget {
   final double size;
@@ -62,4 +62,23 @@ class RadialProgressBar extends StatelessWidget {
       ],
     );
   }
+}
+
+class RadialBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var h = size.height, w = size.width;
+    var center = Offset(w / 2, h / 2);
+
+    var background = Paint()
+      ..color = ColorPalette.grey
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 12;
+
+    canvas.drawCircle(center, w / 2, background);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => this != oldDelegate;
 }

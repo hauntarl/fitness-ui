@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
+import '../utils/fitness_icons.dart';
 
 class AnimatedMenuButton extends StatefulWidget {
   final Function onTap;
@@ -12,6 +13,7 @@ class AnimatedMenuButton extends StatefulWidget {
 class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  Animation<double> _turnAnimation;
 
   @override
   void initState() {
@@ -19,36 +21,35 @@ class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 100),
     );
+
+    _turnAnimation = Tween<double>(
+      begin: 0,
+      end: 0.125,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
+    return GestureDetector(
+      onTap: () {
+        widget.onTap();
+        setState(() {
+          _controller.isCompleted
+              ? _controller.reverse()
+              : _controller.forward();
+        });
+      },
+      child: RotationTransition(
+        turns: _turnAnimation,
+        child: Icon(
+          FitnessIcons.plus_circle,
           color: ColorPalette.red,
-          style: BorderStyle.solid,
-          width: 2,
-        ),
-        shape: BoxShape.circle,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          widget.onTap();
-          setState(() {
-            _controller.isCompleted
-                ? _controller.reverse()
-                : _controller.forward();
-          });
-        },
-        child: AnimatedIcon(
-          size: 35,
-          icon: AnimatedIcons.menu_close,
-          progress: _controller.view,
-          color: ColorPalette.red,
+          size: 45,
         ),
       ),
     );

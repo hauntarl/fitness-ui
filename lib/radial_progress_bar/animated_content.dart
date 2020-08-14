@@ -104,6 +104,6 @@ const kSubhead = TextStyle(
 const kDivider = Divider(
   color: ColorPalette.purple,
   thickness: 3,
-  indent: 70,
-  endIndent: 70,
+  indent: 80,
+  endIndent: 80,
 );

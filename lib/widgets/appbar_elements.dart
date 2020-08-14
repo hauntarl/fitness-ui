@@ -12,28 +12,28 @@ class AppBarElements extends StatefulWidget {
 
 class _AppBarElementsState extends State<AppBarElements>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation _fadeController;
+  AnimationController _fadeController;
+  Animation _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
+    _fadeController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
 
-    _fadeController = Tween<double>(
+    _fadeAnimation = Tween<double>(
       begin: 1,
       end: 0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _fadeController,
       curve: Curves.easeOut,
     ));
 
-    _controller.addListener(() {
-      if (_controller.isCompleted) _controller.reset();
+    _fadeController.addListener(() {
+      if (_fadeController.isCompleted) _fadeController.reverse();
     });
   }
 
@@ -47,9 +47,17 @@ class _AppBarElementsState extends State<AppBarElements>
           FitnessIcons.left_open_big,
           DateEvent.subtract,
         ),
-        FadeTransition(
-          opacity: _fadeController,
-          child: AppBarTitle(),
+        GestureDetector(
+          onHorizontalDragEnd: (details) {
+            var dx = details.primaryVelocity;
+            if (dx < 0) {
+              _onPressed(DateEvent.add);
+            } else if (dx > 0) _onPressed(DateEvent.subtract);
+          },
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: AppBarTitle(),
+          ),
         ),
         _iconButton(
           FitnessIcons.right_open_big,
@@ -65,16 +73,18 @@ class _AppBarElementsState extends State<AppBarElements>
         icon,
         color: ColorPalette.grey,
       ),
-      onPressed: () async {
-        await _controller.forward();
-        dateBloc.dateSink.add(action);
-      },
+      onPressed: () => _onPressed(action),
     );
+  }
+
+  void _onPressed(DateEvent action) async {
+    await _fadeController.forward();
+    dateBloc.dateSink.add(action);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 }
