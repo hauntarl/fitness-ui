@@ -12,28 +12,53 @@ class AppBarElements extends StatefulWidget {
 
 class _AppBarElementsState extends State<AppBarElements>
     with SingleTickerProviderStateMixin {
-  AnimationController _fadeController;
-  Animation _fadeAnimation;
+  AnimationController _controller;
+  Animation<double> _fadeAnimation;
+  Animation<double> _scaleAnimation;
+  Animation<AlignmentGeometry> _alignAnimation;
+  CurvedAnimation _curve;
+  DateEvent _event;
 
   @override
   void initState() {
     super.initState();
 
-    _fadeController = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 400),
+    );
+
+    _curve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
     );
 
     _fadeAnimation = Tween<double>(
       begin: 1,
       end: 0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeOut,
-    ));
+    ).animate(_curve);
 
-    _fadeController.addListener(() {
-      if (_fadeController.isCompleted) _fadeController.reverse();
+    _scaleAnimation = Tween<double>(
+      begin: 1,
+      end: 0.8,
+    ).animate(_curve);
+
+    _alignAnimation = Tween<AlignmentGeometry>(
+      begin: Alignment.center,
+      end: Alignment.center,
+    ).animate(_curve);
+
+    _controller.addListener(() {
+      if (_controller.isCompleted) {
+        _alignAnimation = Tween<AlignmentGeometry>(
+          begin: Alignment.center,
+          end: _event == DateEvent.add
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
+        ).animate(_curve);
+        setState(() {});
+        _controller.reverse();
+      }
     });
   }
 
@@ -43,48 +68,78 @@ class _AppBarElementsState extends State<AppBarElements>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _iconButton(
-          FitnessIcons.left_open_big,
-          DateEvent.subtract,
+        IconButtonWidget(
+          icon: FitnessIcons.left_open_big,
+          event: DateEvent.subtract,
+          onPressed: _onPressed,
         ),
-        GestureDetector(
-          onHorizontalDragEnd: (details) {
-            var dx = details.primaryVelocity;
-            if (dx < 0) {
-              _onPressed(DateEvent.add);
-            } else if (dx > 0) _onPressed(DateEvent.subtract);
-          },
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: AppBarTitle(),
+        Expanded(
+          child: GestureDetector(
+            onHorizontalDragEnd: (details) {
+              var dx = details.primaryVelocity;
+              if (dx == 0) return;
+              var event = dx < 0 ? DateEvent.add : DateEvent.subtract;
+              _onPressed(event);
+            },
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: AlignTransition(
+                  alignment: _alignAnimation,
+                  child: AppBarTitle(),
+                ),
+              ),
+            ),
           ),
         ),
-        _iconButton(
-          FitnessIcons.right_open_big,
-          DateEvent.add,
+        IconButtonWidget(
+          icon: FitnessIcons.right_open_big,
+          event: DateEvent.add,
+          onPressed: _onPressed,
         ),
       ],
     );
   }
 
-  IconButton _iconButton(IconData icon, DateEvent action) {
-    return IconButton(
-      icon: Icon(
-        icon,
-        color: ColorPalette.grey,
-      ),
-      onPressed: () => _onPressed(action),
-    );
-  }
-
   void _onPressed(DateEvent action) async {
-    await _fadeController.forward();
+    _alignAnimation = Tween<AlignmentGeometry>(
+      begin: Alignment.center,
+      end: action == DateEvent.add
+          ? Alignment.centerLeft
+          : Alignment.centerRight,
+    ).animate(_curve);
+    setState(() => _event = action);
+    await _controller.forward();
     dateBloc.dateSink.add(action);
   }
 
   @override
   void dispose() {
-    _fadeController.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+}
+
+class IconButtonWidget extends StatelessWidget {
+  final IconData icon;
+  final DateEvent event;
+  final Function(DateEvent) onPressed;
+
+  const IconButtonWidget({
+    @required this.icon,
+    @required this.event,
+    @required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        icon,
+        color: ColorPalette.grey,
+      ),
+      onPressed: () => onPressed(event),
+    );
   }
 }
