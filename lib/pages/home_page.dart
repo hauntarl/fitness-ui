@@ -17,14 +17,9 @@ class HomePage extends StatelessWidget {
               child: RadialProgressBar(225),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _data,
-              AnimatedMenuButton(
-                onTap: () {},
-              ),
-            ],
+          ..._data,
+          AnimatedMenuButton(
+            onTap: () {},
           ),
           SizedBox(height: 5),
         ],
@@ -32,40 +27,35 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget get _data {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          _dataRow(
-            date: 'February 2020',
-            status: 'On going',
-            task: 'Lose weight',
-            progress: '3.8 ktgt / 7 kg',
-          ),
-          _dataRow(
-            date: 'January 2020',
-            status: 'Failed',
-            task: 'Running per month',
-            progress: '15.3km / 20km',
-          ),
-          _dataRow(
-            date: 'December 2019',
-            status: 'Completed',
-            task: 'Avg. steps per day',
-            progress: '10000 / 10000',
-          ),
-        ],
-      ),
-    );
-  }
+  static const List<Widget> _data = [
+    DataRow(
+      date: 'February 2020',
+      status: 'On going',
+      task: 'Lose weight',
+      progress: '3.8 ktgt / 7 kg',
+    ),
+    DataRow(
+      date: 'January 2020',
+      status: 'Failed',
+      task: 'Running per month',
+      progress: '15.3km / 20km',
+    ),
+    DataRow(
+      date: 'December 2019',
+      status: 'Completed',
+      task: 'Avg. steps per day',
+      progress: '10000 / 10000',
+    ),
+  ];
+}
 
-  Widget _dataRow({
-    String date,
-    String status,
-    String task,
-    String progress,
-  }) {
+class DataRow extends StatelessWidget {
+  final String date, status, task, progress;
+
+  const DataRow({this.date, this.status, this.task, this.progress});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Row(

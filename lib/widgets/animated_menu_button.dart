@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
-import '../utils/fitness_icons.dart';
 
 class AnimatedMenuButton extends StatefulWidget {
   final Function onTap;
-  AnimatedMenuButton({this.onTap});
+  AnimatedMenuButton({@required this.onTap});
   @override
   _AnimatedMenuButtonState createState() => _AnimatedMenuButtonState();
 }
@@ -13,7 +12,6 @@ class AnimatedMenuButton extends StatefulWidget {
 class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  Animation<double> _turnAnimation;
 
   @override
   void initState() {
@@ -21,16 +19,8 @@ class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100),
+      duration: Duration(milliseconds: 300),
     );
-
-    _turnAnimation = Tween<double>(
-      begin: 0,
-      end: 0.125,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    ));
   }
 
   @override
@@ -44,12 +34,21 @@ class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
               : _controller.forward();
         });
       },
-      child: RotationTransition(
-        turns: _turnAnimation,
-        child: Icon(
-          FitnessIcons.plus_circle,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: ColorPalette.red,
+            style: BorderStyle.solid,
+            width: 2,
+          ),
+          shape: BoxShape.circle,
+        ),
+        padding: EdgeInsets.all(5),
+        child: AnimatedIcon(
+          progress: _controller.view,
+          icon: AnimatedIcons.menu_close,
           color: ColorPalette.red,
-          size: 45,
+          size: 30,
         ),
       ),
     );
