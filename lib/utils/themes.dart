@@ -4,4 +4,5 @@ import './colors.dart';
 
 final kDefaultTheme = ThemeData(
   primaryColor: ColorPalette.purple,
+  scaffoldBackgroundColor: Colors.white,
 );
