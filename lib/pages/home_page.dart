@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage>
   Animation<double> _fadeAnimation;
   Animation<Offset> _slideAnimation;
   CurvedAnimation _curvedAnimation;
-  var _showHome = true;
 
   @override
   void initState() {
@@ -87,19 +86,14 @@ class _HomePageState extends State<HomePage>
         ),
         SlideTransition(
           position: _slideAnimation,
-          child: Builder(
-            builder: (_) => _showHome ? Container() : MenuPage(),
-          ),
+          child: MenuPage(),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: AnimatedMenuButton(
-            onTap: () async {
-              _controller.isCompleted
-                  ? await _controller.reverse()
-                  : _controller.forward();
-              setState(() => _showHome = !_showHome);
-            },
+            onTap: () => _controller.isCompleted
+                ? _controller.reverse()
+                : _controller.forward(),
           ),
         ),
       ],
