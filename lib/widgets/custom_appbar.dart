@@ -6,12 +6,11 @@ import '../utils/colors.dart';
 class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var statusBarHeight = MediaQuery.of(context).padding.top;
     return CustomPaint(
       painter: CustomShapePainter(),
       child: Container(
-        height: 180 + statusBarHeight,
-        padding: EdgeInsets.only(top: statusBarHeight + 10),
+        height: 200,
+        padding: EdgeInsets.only(top: 20),
         child: AppBarElements(),
       ),
     );

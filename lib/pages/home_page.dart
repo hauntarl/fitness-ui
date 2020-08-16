@@ -4,28 +4,11 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/animated_menu_button.dart';
 import '../radial_progress_bar/radial_progress_bar.dart';
+import './menu_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          CustomAppBar(),
-          Expanded(
-            child: Center(
-              child: RadialProgressBar(225),
-            ),
-          ),
-          ..._data,
-          AnimatedMenuButton(
-            onTap: () {},
-          ),
-          SizedBox(height: 5),
-        ],
-      ),
-    );
-  }
+  _HomePageState createState() => _HomePageState();
 
   static const List<Widget> _data = [
     DataRow(
@@ -47,6 +30,87 @@ class HomePage extends StatelessWidget {
       progress: '10000 / 10000',
     ),
   ];
+}
+
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> _fadeAnimation;
+  Animation<Offset> _slideAnimation;
+  CurvedAnimation _curvedAnimation;
+  var _showHome = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    );
+
+    _curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(_curvedAnimation);
+
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, 1),
+      end: Offset(0, 0),
+    ).animate(_curvedAnimation);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
+            children: [
+              CustomAppBar(),
+              Expanded(
+                child: Center(
+                  child: RadialProgressBar(225),
+                ),
+              ),
+              ...HomePage._data,
+              SizedBox(height: 50),
+            ],
+          ),
+        ),
+        SlideTransition(
+          position: _slideAnimation,
+          child: Builder(
+            builder: (_) => _showHome ? Container() : MenuPage(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AnimatedMenuButton(
+            onTap: () async {
+              _controller.isCompleted
+                  ? await _controller.reverse()
+                  : _controller.forward();
+              setState(() => _showHome = !_showHome);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
 
 class DataRow extends StatelessWidget {
