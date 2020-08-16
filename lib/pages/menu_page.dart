@@ -39,11 +39,11 @@ class MenuPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  _sizedBox30,
+                  _sizedBox20,
                   _buildActivityStats,
                   _sizedBox20,
                   _buildTimeline,
-                  SizedBox(height: 25),
+                  _sizedBox20,
                   _generateBarGraph,
                   _sizedBox20,
                   _buildFilter,
