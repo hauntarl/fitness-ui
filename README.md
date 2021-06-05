@@ -4,4 +4,4 @@ A repository containing UI elements for a **[Fitness App](https://dribbble.com/s
 
 Tutorial - **[Techie Blossom](https://www.youtube.com/watch?v=4lHDXcOXOYc)**
 
-<img src="https://github.com/hauntarl/flui_002_fitness/blob/master/screenshots/home-page.gif" width="250"> <img src="https://github.com/hauntarl/flui_002_fitness/blob/master/screenshots/menu-page.gif" width="250">
+<img src="https://github.com/hauntarl/hauntarl/blob/master/fitness-ui/home-page.gif" width="250"> <img src="https://github.com/hauntarl/hauntarl/blob/master/fitness-ui/menu-page.gif" width="250">
